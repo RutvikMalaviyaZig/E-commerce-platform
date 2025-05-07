@@ -1,6 +1,6 @@
-# E-commerce-platform
+# E-commerce-platform (Zaytri)
 
-# 🛒 E-Commerce Platform Backend
+# 🛒 E-Commerce Platform Backend (Zaytri)
 
 A full-featured E-Commerce Backend built with **NestJS** and **PostgreSQL** using **TypeORM**. It provides a RESTful API for managing users, roles, products, categories, orders, addresses, and includes authentication and media storage with **Cloudinary**.
 
@@ -10,7 +10,7 @@ A full-featured E-Commerce Backend built with **NestJS** and **PostgreSQL** usin
 
 - 🔐 Authentication & Authorization (JWT-based, Role-based)
 - 👤 User Management (Signup, Login, Profile)
-- 🛡️ Role Management (Admin Only)
+- 🛡️ Role Management (super Admin Only)
 - 📦 Product & Category Management
 - 📬 Order Management
 - 🏠 Address Management
@@ -27,7 +27,6 @@ A full-featured E-Commerce Backend built with **NestJS** and **PostgreSQL** usin
 - **JWT** & **Bcrypt** (Authentication & Password Hashing)
 - **Multer** & **Cloudinary** (File Upload & Storage)
 - **Docker** (Containerization)
-
 
 ---
 
