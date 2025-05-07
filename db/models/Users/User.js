@@ -1,6 +1,6 @@
-const { DataTypes } = require("../../config/constants");
+const { DataTypes } = require("../../../config/constant");
 const sequelize = require("../../../config/database");
-const { Media } = require('../Media/Media.model');
+const  Media  = require('../Media/Media');
 
 const User = sequelize.define(
   "User",
@@ -93,6 +93,10 @@ const User = sequelize.define(
     isDeleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

@@ -12,7 +12,7 @@ const startServer = async (sequelize, port) => {
         console.log("Error: " + err);
       });
 
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ alter: true });
 
     console.log("✅ Server started on port:" + port);
   } catch (error) {

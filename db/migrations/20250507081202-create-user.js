@@ -100,6 +100,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      password : {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
     });
 
   },

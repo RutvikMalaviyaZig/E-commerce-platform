@@ -45,7 +45,28 @@ const Admin = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    ...models.defaultAttributes,
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    createdAt: {
+      type: DataTypes.BIGINT,
+      defaultValue: () => Date.now(), // Dynamically set the default value
+    },
+    updatedAt: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      defaultValue: () => Date.now(), // Dynamically set the default value
+    },
+    deletedAt: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+    },
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
 
   {
