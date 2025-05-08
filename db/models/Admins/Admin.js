@@ -1,4 +1,4 @@
-const { DataTypes } = require("../../config/constants");
+const { DataTypes } = require("../../../config/constant");
 const sequelize = require("../../../config/database");
 
 const Admin = sequelize.define(
@@ -38,10 +38,6 @@ const Admin = sequelize.define(
       type: DataTypes.BIGINT,
     },
     authToken: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    refreshToken: {
       type: DataTypes.TEXT,
       allowNull: true,
     },

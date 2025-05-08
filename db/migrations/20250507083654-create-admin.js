@@ -51,10 +51,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      refreshToken: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-      },
       createdAt: {
         type: Sequelize.BIGINT,
         defaultValue: Date.now(),

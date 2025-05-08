@@ -41,9 +41,6 @@ const validateUserAuth = (bodyData) => {
         loginMethod: "string|required",
         name: "string",
         phone: "string",
-        osType: "string|required",
-        deviceId: "string|required",
-        deviceToken: "string|required",
       };
 
       break;
@@ -62,9 +59,6 @@ const validateUserAuth = (bodyData) => {
         ],
         dateOfBirth: "string|required",
         password: "string|required",
-        deviceId: "string|required",
-        deviceToken: "string|required",
-        osType: "string|required",
       };
 
       break;
@@ -73,9 +67,6 @@ const validateUserAuth = (bodyData) => {
     case VALIDATION_EVENTS.USER_LOGIN_EMAIL: {
       rules = {
         email: "string|required|email",
-        deviceId: "string|required",
-        deviceToken: "string|required",
-        osType: "string|required",
         password : "string|required",
       };
 
@@ -85,9 +76,6 @@ const validateUserAuth = (bodyData) => {
     case VALIDATION_EVENTS.USER_LOGIN_PHONE: {
       rules = {
         phone: "string|required",
-        deviceId: "string|required",
-        deviceToken: "string|required",
-        osType: "string|required",
         password : "string|required",
       };
 
@@ -96,7 +84,7 @@ const validateUserAuth = (bodyData) => {
 
     case VALIDATION_EVENTS.USER_LOGOUT: {
       rules = {
-        deviceId: "string|required",
+        id: "string|required",
       };
 
       break;
