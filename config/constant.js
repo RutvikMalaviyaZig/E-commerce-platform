@@ -3,7 +3,10 @@ const VALIDATOR = require("validatorjs");
 const JWT = require("jsonwebtoken");
 const BCRYPT = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
-const { Op, DataTypes, literal } = require('sequelize');
+const { Op, DataTypes, literal } = require("sequelize");
+const FS = require("fs");
+const MULTER = require("multer");
+const PATH = require('path')
 
 const VALIDATION_EVENTS = {
   LOGIN_ADMIN: "loginAdmin",
@@ -25,10 +28,13 @@ const VALIDATION_EVENTS = {
   ADMIN_LOGOUT: "adminLogout",
   UPDATE_USER: "updateUser",
   VIEW_USER: "viewUser",
+  VIEW_ADMIN: "viewAdmin",
   UPDATE_USER_BY_ADMIN: "updateUserByAdmin",
   DELETE_USER: "deleteUser",
+  DELETE_USER_BY_ADMIN_OR_SUPER_ADMIN : "deleteUserByAdminOrSuperAdmin",
   AFTER_SET_PASSWORD: "afterSetPassword",
   VERIFY_LINK: "verifyLink",
+  DELETE_USER_OR_ADMIN_BY_SUPER_ADMIN : "deletedUserOrAdminBySuperAdmin",
 };
 
 // Response Codes
@@ -57,17 +63,45 @@ const GENDER = {
 
 // JWT Expiry
 const TOKEN_EXPIRY = {
-  USER_ACCESS_TOKEN: '60m',
-  USER_REFRESH_TOKEN: '30d',
-  ADMIN_ACCESS_TOKEN: '1d',
+  USER_ACCESS_TOKEN: "60m",
+  USER_REFRESH_TOKEN: "30d",
+  ADMIN_ACCESS_TOKEN: "1d",
   USER_FORGOT_PASSWORD_TOKEN: 900000, // 15 minutes
   ADMIN_FORGOT_PASSWORD_TOKEN: 5 * 60, // 5 minutes
 };
 
 const USER_ROLES = {
-  SUPER_ADMIN: 'super-admin',
-  ADMIN: 'admin',
-  USER: 'user',
+  SUPER_ADMIN: "superAdmin",
+  ADMIN: "admin",
+  USER: "user",
+};
+
+const FILE_CONSTANTS = {
+  TYPES: {
+    IMAGE: {
+      FLAG: "I",
+      CONTENT_TYPES: ["image/png", "image/jpg", "image/jpeg"],
+    },
+    VIDEO: {
+      FLAG: "V",
+      CONTENT_TYPES: ["video/quicktime", "video/x-ms-wmv", "video/mp4"],
+    },
+  },
+  UPLOAD: {
+    PATH: "uploads/",
+  },
+  TEST: {
+    PATH: "test/",
+    SIZE: 10 * 1024 * 1024,
+    CONTENT_TYPES: [
+      "image/png",
+      "image/jpg",
+      "image/jpeg",
+      "image/svg+xml",
+      "video/mp4",
+    ],
+  },
+  MAX_SIZE: 1 * 1024 * 1024 * 1024, // 1 GB file size limit
 };
 
 module.exports = {
@@ -84,4 +118,8 @@ module.exports = {
   DataTypes,
   literal,
   USER_ROLES,
+  FILE_CONSTANTS,
+  FS,
+  MULTER,
+  PATH,
 };

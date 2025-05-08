@@ -306,4 +306,87 @@ module.exports = {
       });
     }
   },
+  /**
+   * @name deleteAccount
+   * @file AdminController.js
+   * @param {Request} req
+   * @param {Response} res
+   * @description Delte account by self
+   * @author Rutvik Malaviya
+   */
+  deleteAccount: async (req, res) => {
+    try {
+      //collect all data from request body
+      const authDetails = {
+        id: req.headers.userData.id,
+        eventCode: VALIDATION_EVENTS.DELETE_ADMIN,
+      };
+      // Perform validation
+      const validationResult = validateAdminAuth(authDetails);
+
+      // If any rule is violated, send validation response
+      if (validationResult.hasError) {
+        return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+          status: HTTP_STATUS_CODE.BAD_REQUEST,
+          data: {},
+          message: '',
+          error: validationResult.errors,
+        });
+      }
+
+      //find requested admin details from db
+      let findAdmin = await Admin.findOne({
+        where: {
+          id: authDetails.id,
+          isDeleted: false,
+        },
+        exclude: [
+          'password',
+          'forgotPasswordToken',
+          'forgotPasswordTokenExpiry',
+        ],
+      });
+
+      if (!findAdmin) {
+        return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+          status: HTTP_STATUS_CODE.BAD_REQUEST,
+          data: {},
+          message: req.__('Admin.Auth.AdminNotFound'),
+          error: '',
+        });
+      }
+
+      //delete admin user
+      await Admin.destroy(
+        {
+          where: {
+            id: authDetails.id,
+            isDeleted: false,
+          },
+        }
+      );
+
+      //return response
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        status: HTTP_STATUS_CODE.OK,
+        message: req.__('Admin.Auth.AdminDeleted'),
+        data: {},
+        error: '',
+      });
+    } catch (error) {
+      //create error log
+      await generateError({
+        apiName: 'AdminController - deleteAdmin',
+        details: error?.message ? error.message : JSON.stringify(error),
+      });
+
+      //return error response
+      return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({
+        status: HTTP_STATUS_CODE.SERVER_ERROR,
+        message: '',
+        data: {},
+        error: error.message,
+      });
+    }
+  },
 };

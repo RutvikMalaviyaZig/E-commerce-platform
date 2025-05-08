@@ -104,6 +104,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      countryCode: {
+      type: DataTypes.STRING(5),
+      allowNull: true,
+    },
     });
 
   },

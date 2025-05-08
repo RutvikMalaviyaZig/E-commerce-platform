@@ -68,6 +68,20 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      countryCode: {
+      type: DataTypes.STRING(5),
+      allowNull: true,
+    },
+    profileImageId: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: "media", // Use table name
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      },
     });
   },
 

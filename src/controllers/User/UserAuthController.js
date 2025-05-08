@@ -34,6 +34,7 @@ module.exports = {
         dateOfBirth: req.body.dateOfBirth,
         password: req.body.password,
         loginWith: LOGIN_WITH.EMAIL,
+        countryCode : req.body.countryCode,
         eventCode: VALIDATION_EVENTS.USER_SIGNUP_EMAIL,
       };
 
@@ -394,7 +395,7 @@ module.exports = {
       // update authToken null
       await User.update(
         {
-          authToken: '',
+          authToken: "",
           lastLogoutAt: Date.now(),
         },
         {
@@ -404,18 +405,63 @@ module.exports = {
           },
         }
       );
-      
+
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
-        message: req.__('User.Auth.Logout'),
+        message: req.__("User.Auth.Logout"),
         data: {},
-        error: '',
+        error: "",
       });
-
     } catch (error) {
       //create error log
       await generateError({
         apiName: "UserAuthController - logout",
+        details: error?.message ? error.message : JSON.stringify(error),
+      });
+      return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({
+        status: HTTP_STATUS_CODE.SERVER_ERROR,
+        message: "",
+        data: {},
+        error: error.message,
+      });
+    }
+  },
+
+  /**
+   * @name deleteAccount
+   * @file UserAuthController.js
+   * @param {Request} req
+   * @param {Response} res
+   * @description delete user account(soft delete)
+   * @author Rutvik Malaviya
+   */
+
+  deleteAccount: async (req, res) => {
+    try {
+      const { id } = req.headers.userData;
+      await User.update(
+        {
+          isDeleted: true,
+          deletedAt: Date.now(),
+          authToken: "",
+        },
+        {
+          where: {
+            id,
+            isDeleted: false,
+          },
+        }
+      );
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        status: HTTP_STATUS_CODE.OK,
+        message: req.__("User.Auth.DeleteSelf"),
+        data: {},
+        error: "",
+      });
+    } catch (error) {
+      //create error log
+      await generateError({
+        apiName: "UserAuthController - deleteAccount",
         details: error?.message ? error.message : JSON.stringify(error),
       });
       return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({

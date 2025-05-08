@@ -52,7 +52,9 @@
       "PasswordNotMatch": "Passwords do not match. Please try again",
       "AdminPasswordChanged": "Your password has been successfully updated",
       "AdminDeleted": "Admin deleted successfully",
-      "UserUpdated": "User updated successfully"
+      "UserUpdated": "User updated successfully",
+      "UserDeleted" : "User deleted successfully",
+      "Deleted" : "Deleted Successfully"
     }
   },
   "General": {
