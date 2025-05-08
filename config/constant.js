@@ -17,9 +17,12 @@ const VALIDATION_EVENTS = {
   EDIT_ADMIN_BY_SUPER_ADMIN: "editAdminBySuperAdmin",
   USER_LOGIN_SOCIAL: "userLoginSocial",
   USER_SIGNUP_EMAIL: "userSignupEmail",
+  ADMIN_SIGNUP_EMAIL: "adminSignupEmail",
   USER_LOGIN_EMAIL: "userLoginEmail",
+  ADMIN_LOGIN_EMAIL: "adminLoginEmail",
   USER_LOGIN_PHONE: "userLoginPhone",
   USER_LOGOUT: "userLogout",
+  ADMIN_LOGOUT: "adminLogout",
   UPDATE_USER: "updateUser",
   VIEW_USER: "viewUser",
   UPDATE_USER_BY_ADMIN: "updateUserByAdmin",
@@ -39,12 +42,6 @@ const HTTP_STATUS_CODE = {
   CONFLICT: 409,
   UNPROCESSABLE_ENTITY: 422,
   SERVER_ERROR: 500,
-};
-
-const DEVICE_TYPE = {
-  WEB: "web",
-  ANDROID: "android",
-  IOS: "ios",
 };
 
 const LOGIN_WITH = {
@@ -76,7 +73,6 @@ const USER_ROLES = {
 module.exports = {
   VALIDATION_EVENTS,
   HTTP_STATUS_CODE,
-  DEVICE_TYPE,
   LOGIN_WITH,
   GENDER,
   VALIDATOR,

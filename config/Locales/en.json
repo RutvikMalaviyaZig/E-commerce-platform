@@ -26,9 +26,7 @@
       "UserAlreadyExists": "User already exists with same email address",
       "UserAlreadyExist": "User already exists with same email or phone",
       "SendAfterSomeTime": "Please check your mail and try after some time",
-      "SessionExpired": "Your session is expired please login again",
-      "MealTimeUpdated": "Your meal time updated",
-      "MealTimeNotFound": "Meal time not found"
+      "SessionExpired": "Your session is expired please login again"
     }
   },
   "Admin": {
