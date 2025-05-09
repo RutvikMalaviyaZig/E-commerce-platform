@@ -11,9 +11,11 @@ const PATH = require('path')
 const VALIDATION_EVENTS = {
   LOGIN_ADMIN: "loginAdmin",
   CREATE_ADMIN: "createAdmin",
+  CREATE_ADMIN_OR_USER: "createAdminOrUser",
   FORGOT_PASSWORD: "forgotPassword",
   RESET_PASSWORD: "resetPassword",
   GET_ADMIN: "getAdmin",
+  GET_ADMIN_LIST: "getAdminList",
   UPDATE_ADMIN: "updateAdmin",
   DELETE_ADMIN: "deleteAdmin",
   CHANGE_PASSWORD_ADMIN: "changePasswordAdmin",
@@ -35,6 +37,9 @@ const VALIDATION_EVENTS = {
   AFTER_SET_PASSWORD: "afterSetPassword",
   VERIFY_LINK: "verifyLink",
   DELETE_USER_OR_ADMIN_BY_SUPER_ADMIN : "deletedUserOrAdminBySuperAdmin",
+  UPDATE_USER_BY_ADMIN_OR_SUPER_ADMIN : "updateUserByAdminOrSuperAdmin",
+  UPDATE_USER_OR_ADMIN_BY_SUPER_ADMIN : "updateUserOrAdminBySuperAdmin",
+  CREATE_USER_BY_ADMIN_OR_SUPER_ADMIN : "createUserOrAdminBySuperAdmin"
 };
 
 // Response Codes
@@ -63,7 +68,7 @@ const GENDER = {
 
 // JWT Expiry
 const TOKEN_EXPIRY = {
-  USER_ACCESS_TOKEN: "60m",
+  USER_ACCESS_TOKEN: "120m",
   USER_REFRESH_TOKEN: "30d",
   ADMIN_ACCESS_TOKEN: "1d",
   USER_FORGOT_PASSWORD_TOKEN: 900000, // 15 minutes

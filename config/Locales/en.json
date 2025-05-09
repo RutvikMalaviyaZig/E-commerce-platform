@@ -53,6 +53,7 @@
       "AdminPasswordChanged": "Your password has been successfully updated",
       "AdminDeleted": "Admin deleted successfully",
       "UserUpdated": "User updated successfully",
+      "UserCreated": "User created successfully",
       "UserDeleted" : "User deleted successfully",
       "Deleted" : "Deleted Successfully"
     }

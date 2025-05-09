@@ -64,10 +64,6 @@ const Admin = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    countryCode: {
-      type: DataTypes.STRING(5),
-      allowNull: true,
-    },
     profileImageId: {
       type: DataTypes.UUID,
       allowNull: true,

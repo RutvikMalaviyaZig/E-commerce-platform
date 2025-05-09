@@ -6,6 +6,7 @@ const {
 } = require("../../../config/constant");
 const { validateUserAuth } = require("../../validation/UserAuthValidation");
 const { generateError } = require("../../helper/error/generateError");
+const { calculateAge } = require("../../helper/ageCalculation/ageCalculation");
 const User = require("../../../db/models/Users/User");
 const Media = require("../../../db/models/Media/Media");
 
@@ -208,6 +209,8 @@ module.exports = {
       ) {
         delete userDetails.email;
       }
+
+      userDetails.age = calculateAge();
 
       // update user details
       await User.update(userDetails, {
