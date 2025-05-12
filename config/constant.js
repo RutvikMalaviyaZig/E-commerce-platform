@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 const { Op, DataTypes, literal } = require("sequelize");
 const FS = require("fs");
 const MULTER = require("multer");
-const PATH = require('path')
+const PATH = require("path");
 
 const VALIDATION_EVENTS = {
   LOGIN_ADMIN: "loginAdmin",
@@ -15,7 +15,6 @@ const VALIDATION_EVENTS = {
   FORGOT_PASSWORD: "forgotPassword",
   RESET_PASSWORD: "resetPassword",
   GET_ADMIN: "getAdmin",
-  GET_ADMIN_LIST: "getAdminList",
   UPDATE_ADMIN: "updateAdmin",
   DELETE_ADMIN: "deleteAdmin",
   CHANGE_PASSWORD_ADMIN: "changePasswordAdmin",
@@ -33,13 +32,24 @@ const VALIDATION_EVENTS = {
   VIEW_ADMIN: "viewAdmin",
   UPDATE_USER_BY_ADMIN: "updateUserByAdmin",
   DELETE_USER: "deleteUser",
-  DELETE_USER_BY_ADMIN_OR_SUPER_ADMIN : "deleteUserByAdminOrSuperAdmin",
+  DELETE_USER_BY_ADMIN_OR_SUPER_ADMIN: "deleteUserByAdminOrSuperAdmin",
   AFTER_SET_PASSWORD: "afterSetPassword",
   VERIFY_LINK: "verifyLink",
-  DELETE_USER_OR_ADMIN_BY_SUPER_ADMIN : "deletedUserOrAdminBySuperAdmin",
-  UPDATE_USER_BY_ADMIN_OR_SUPER_ADMIN : "updateUserByAdminOrSuperAdmin",
-  UPDATE_USER_OR_ADMIN_BY_SUPER_ADMIN : "updateUserOrAdminBySuperAdmin",
-  CREATE_USER_BY_ADMIN_OR_SUPER_ADMIN : "createUserOrAdminBySuperAdmin"
+  DELETE_USER_OR_ADMIN_BY_SUPER_ADMIN: "deletedUserOrAdminBySuperAdmin",
+  UPDATE_USER_BY_ADMIN_OR_SUPER_ADMIN: "updateUserByAdminOrSuperAdmin",
+  UPDATE_USER_OR_ADMIN_BY_SUPER_ADMIN: "updateUserOrAdminBySuperAdmin",
+  CREATE_USER_BY_ADMIN_OR_SUPER_ADMIN: "createUserOrAdminBySuperAdmin",
+
+  // categories
+  CREATE_CATEGORY: "createCategory",
+  UPDATE_CATEGORY : "updateCategory",
+  DELETE_CATEGORY : "deleteCategory",
+
+  // product
+
+  CREATE_PRODUCT: "createProduct",
+  UPDATE_PRODUCT : "updateProduct",
+  DELETE_PRODUCT : "deleteProduct",
 };
 
 // Response Codes

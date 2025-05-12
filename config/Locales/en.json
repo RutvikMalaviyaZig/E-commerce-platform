@@ -54,9 +54,16 @@
       "AdminDeleted": "Admin deleted successfully",
       "UserUpdated": "User updated successfully",
       "UserCreated": "User created successfully",
-      "UserDeleted" : "User deleted successfully",
-      "Deleted" : "Deleted Successfully"
+      "UserDeleted": "User deleted successfully",
+      "Deleted": "Deleted Successfully"
     }
+  },
+  "Category": {
+    "CategoryCreated": "Category created successfully",
+    "CategoryUpdated": "Category Updated successfully",
+    "CategoryDeleted": "Category Deleted Successfully",
+    "CategoryAlreadyExist": "Category already exists with same name",
+    "CategoryNotExist" : "Category Not exists"
   },
   "General": {
     "SomethingWentsWrong": "Something wents wrong",
