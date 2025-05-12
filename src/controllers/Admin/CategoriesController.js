@@ -102,7 +102,7 @@ module.exports = {
     try {
       const categoryDetails = {
         id: req.headers.userData.id,
-        categoryId: req.body.categoryId,
+        categoryId: req.query.categoryId,
         categoryName: req.body.categoryName,
         eventCode: VALIDATION_EVENTS.UPDATE_CATEGORY,
       };
@@ -190,7 +190,7 @@ module.exports = {
     try {
       const categoryDetails = {
         id: req.headers.userData.id,
-        categoryId: req.body.categoryId,
+        categoryId: req.query.categoryId,
         eventCode: VALIDATION_EVENTS.DELETE_CATEGORY,
       };
 

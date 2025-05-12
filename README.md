@@ -182,6 +182,15 @@ docker-compose up --build
 - `PUT /admin/editProfile` - Update admin or superAdmin by ID
 - `DELETE /admin/deleteAccount` - Delete account by ID
 
+
+### 🗂️ Categories
+
+- `POST /category/create` - Create a new category (Admin only)
+- `GET /category.list` - Get all categories
+- `PUT /category/update?id` - Update a category (Admin only)
+- `DELETE /category/delete?id` - Delete a category (Admin only)
+
+
 ### 🛒 Products
 
 - `POST /products` - Create a new product
@@ -189,14 +198,6 @@ docker-compose up --build
 - `GET /products/{id}` - Get a product by ID
 - `PUT /products/{id}` - Update a product (Admin only)
 - `DELETE /products/{id}` - Delete a product (Admin only)
-
-### 🗂️ Categories
-
-- `POST /categories` - Create a new category (Admin only)
-- `GET /categories` - Get all categories
-- `GET /categories/id/{id}` - Get a category by ID
-- `PUT /categories/{id}` - Update a category (Admin only)
-- `DELETE /categories/{id}` - Delete a category (Admin only)
 
 ### ❤️ Likes
 
