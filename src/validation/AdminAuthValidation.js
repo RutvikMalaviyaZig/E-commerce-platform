@@ -34,18 +34,6 @@ const {
         break;
       }
   
-      case VALIDATION_EVENTS.ADMIN_LOGIN_SOCIAL: {
-        rules = {
-          email: "string|email",
-          socialMediaId: "string|required",
-          loginMethod: "string",
-          name: "string",
-          phone: "string",
-        };
-  
-        break;
-      }
-  
       case VALIDATION_EVENTS.ADMIN_SIGNUP_EMAIL: {
         rules = {
           name: "string|required",

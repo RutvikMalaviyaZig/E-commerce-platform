@@ -34,6 +34,7 @@ module.exports = {
         dateOfBirth: req.body.dateOfBirth,
         password: req.body.password,
         loginWith: LOGIN_WITH.EMAIL,
+        countryCode: req.body.countryCode,
         eventCode: VALIDATION_EVENTS.USER_SIGNUP_EMAIL,
       };
 
@@ -90,25 +91,31 @@ module.exports = {
         TOKEN_EXPIRY.USER_ACCESS_TOKEN
       );
 
-      // create user
-      let userAddData = await User.create({
-        id: userId,
-        name: userData.name,
-        email: userData.email,
-        password: hashPassword,
-        phone: userData.phone,
-        gender: userData.gender,
-        dateOfBirth: userData.dateOfBirth,
-        age: userData.age,
-        loginWith: userData.loginWith,
-        authToken,
+      //creation of data
+      await sequelize.transaction(async (transaction) => {
+        // create user
+        await User.create(
+          {
+            id: userId,
+            name: userData.name,
+            email: userData.email,
+            password: hashPassword,
+            phone: userData.phone,
+            gender: userData.gender,
+            dateOfBirth: userData.dateOfBirth,
+            age: userData.age,
+            loginWith: userData.loginWith,
+            authToken,
+          },
+          { transaction }
+        );
       });
 
       //send response
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
         message: "",
-        data: userAddData,
+        data: {},
         error: "",
       });
     } catch (error) {
@@ -218,17 +225,21 @@ module.exports = {
         userData.dataValues.authToken = updateUserData.authToken;
       }
 
-      await User.update(updateUserData, {
-        where: {
-          id: userData.id,
-          isDeleted: false,
-        },
+      //creation of data
+      await sequelize.transaction(async (transaction) => {
+        await User.update(updateUserData, {
+          where: {
+            id: userData.id,
+            isDeleted: false,
+          },
+          transaction,
+        });
       });
 
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
         message: req.__("User.Auth.Login"),
-        data: userData,
+        data: {},
         error: "",
       });
     } catch (error) {
@@ -335,18 +346,20 @@ module.exports = {
         );
         userData.dataValues.authToken = updateUserData.authToken;
       }
-
-      await User.update(updateUserData, {
-        where: {
-          id: userData.id,
-          isDeleted: false,
-        },
+      //creation of data
+      await sequelize.transaction(async (transaction) => {
+        await User.update(updateUserData, {
+          where: {
+            id: userData.id,
+            isDeleted: false,
+          },
+          transaction,
+        });
       });
-
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
         message: req.__("User.Auth.Login"),
-        data: userData,
+        data: {},
         error: "",
       });
     } catch (error) {
@@ -391,31 +404,83 @@ module.exports = {
         });
       }
 
-      // update authToken null
-      await User.update(
-        {
-          authToken: '',
-          lastLogoutAt: Date.now(),
-        },
-        {
-          where: {
-            id,
-            isDeleted: false,
+      //creation of data
+      await sequelize.transaction(async (transaction) => {
+        // update authToken null
+        await User.update(
+          {
+            authToken: "",
+            lastLogoutAt: Date.now(),
           },
-        }
-      );
-      
+          {
+            where: {
+              id,
+              isDeleted: false,
+            },
+            transaction,
+          }
+        );
+      });
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
-        message: req.__('User.Auth.Logout'),
+        message: req.__("User.Auth.Logout"),
         data: {},
-        error: '',
+        error: "",
       });
-
     } catch (error) {
       //create error log
       await generateError({
         apiName: "UserAuthController - logout",
+        details: error?.message ? error.message : JSON.stringify(error),
+      });
+      return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({
+        status: HTTP_STATUS_CODE.SERVER_ERROR,
+        message: "",
+        data: {},
+        error: error.message,
+      });
+    }
+  },
+
+  /**
+   * @name deleteAccount
+   * @file UserAuthController.js
+   * @param {Request} req
+   * @param {Response} res
+   * @description delete user account(soft delete)
+   * @author Rutvik Malaviya
+   */
+
+  deleteAccount: async (req, res) => {
+    try {
+      const { id } = req.headers.userData;
+      //creation of data
+      await sequelize.transaction(async (transaction) => {
+        await User.update(
+          {
+            isDeleted: true,
+            deletedAt: Date.now(),
+            authToken: "",
+          },
+          {
+            where: {
+              id,
+              isDeleted: false,
+            },
+            transaction,
+          }
+        );
+      });
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        status: HTTP_STATUS_CODE.OK,
+        message: req.__("User.Auth.DeleteSelf"),
+        data: {},
+        error: "",
+      });
+    } catch (error) {
+      //create error log
+      await generateError({
+        apiName: "UserAuthController - deleteAccount",
         details: error?.message ? error.message : JSON.stringify(error),
       });
       return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({

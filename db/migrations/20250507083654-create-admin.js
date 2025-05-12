@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add altering commands here.
      *
@@ -68,10 +68,20 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      profileImageId: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: "media", // Use table name
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      },
     });
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add reverting commands here.
      *
@@ -79,5 +89,5 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
     await queryInterface.dropTable("admin");
-  }
+  },
 };

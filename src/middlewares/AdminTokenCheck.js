@@ -1,23 +1,28 @@
-const { HTTP_STATUS_CODE, JWT, USER_ROLES } = require('../../config/constant');
-const  Admin  = require('../../db/models/Admins/Admin');
+const {
+  HTTP_STATUS_CODE,
+  JWT,
+  USER_ROLES,
+  Op,
+} = require("../../config/constant");
+const Admin = require("../../db/models/Admins/Admin");
 
 module.exports.isAdmin = async (req, res, next) => {
   try {
     //getting authToken from headers
-    let authToken = req.headers['authorization'];
+    let authToken = req.headers["authorization"];
 
     //check if authToken starts with Bearer, fetch the token or return error
-    if (authToken && authToken.startsWith('Bearer ')) {
+    if (authToken && authToken.startsWith("Bearer ")) {
       //if token start with Bearer
-      authToken = authToken.split(' ')[1];
+      authToken = authToken.split(" ")[1];
     } else {
       //if token is not provided then send validation response
       return res.status(HTTP_STATUS_CODE.UNAUTHORIZED).json({
         status: HTTP_STATUS_CODE.UNAUTHORIZED,
-        errorCode: 'AUTH004',
-        message: '',
+        errorCode: "AUTH004",
+        message: "",
         data: {},
-        error: '',
+        error: "",
       });
     }
 
@@ -31,23 +36,25 @@ module.exports.isAdmin = async (req, res, next) => {
       decodedToken.exp > Math.floor(Date.now() / 1000)
     ) {
       if (decodedToken.id) {
-        let admin = await Admin.findOne({
+        const admin = await Admin.findOne({
           where: {
             id: decodedToken.id,
-            role : USER_ROLES.ADMIN,
+            role: {
+              [Op.in]: [USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN],
+            },
             isDeleted: false,
           },
-          attributes: ['id', 'email', 'name', 'authToken','role'],
+          attributes: ["id", "email", "name", "authToken", "role"],
         });
 
         if (!admin) {
           //if admin is not found in database then send validation response
           return res.status(HTTP_STATUS_CODE.UNAUTHORIZED).json({
             status: HTTP_STATUS_CODE.UNAUTHORIZED,
-            errorCode: 'AUTH003',
-            message: '',
+            errorCode: "AUTH003",
+            message: "",
             data: {},
-            error: '',
+            error: "",
           });
         }
 
@@ -56,10 +63,10 @@ module.exports.isAdmin = async (req, res, next) => {
         if (admin.dataValues.authToken !== authToken) {
           return res.status(HTTP_STATUS_CODE.UNAUTHORIZED).json({
             status: HTTP_STATUS_CODE.UNAUTHORIZED,
-            errorCode: 'AUTH003',
-            message: '',
+            errorCode: "AUTH003",
+            message: "",
             data: {},
-            error: '',
+            error: "",
           });
         }
 
@@ -68,19 +75,19 @@ module.exports.isAdmin = async (req, res, next) => {
       } else {
         return res.status(HTTP_STATUS_CODE.UNAUTHORIZED).json({
           status: HTTP_STATUS_CODE.UNAUTHORIZED,
-          errorCode: 'AUTH003',
-          message: '',
+          errorCode: "AUTH003",
+          message: "",
           data: {},
-          error: '',
+          error: "",
         });
       }
     } else {
       return res.status(HTTP_STATUS_CODE.UNAUTHORIZED).json({
         status: HTTP_STATUS_CODE.UNAUTHORIZED,
-        errorCode: 'AUTH004',
-        message: '',
+        errorCode: "AUTH004",
+        message: "",
         data: {},
-        error: '',
+        error: "",
       });
     }
   } catch (error) {
@@ -88,17 +95,17 @@ module.exports.isAdmin = async (req, res, next) => {
     if (error instanceof JWT.TokenExpiredError) {
       return res.status(HTTP_STATUS_CODE.UNAUTHORIZED).json({
         status: HTTP_STATUS_CODE.UNAUTHORIZED,
-        errorCode: 'AUTH004',
-        message: '',
+        errorCode: "AUTH004",
+        message: "",
         data: {},
-        error: '',
+        error: "",
       });
     } else {
       //send server error response
       return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({
         status: HTTP_STATUS_CODE.SERVER_ERROR,
-        errorCode: 'ERR500',
-        message: '',
+        errorCode: "ERR500",
+        message: "",
         data: {},
         error: error.message,
       });

@@ -14,6 +14,7 @@ router.post("/signup", UserAuthController.signupWithEmail);
 router.post("/login", UserAuthController.loginWithEmail);
 router.post("/login-phone", UserAuthController.loginWithPhone);
 router.post("/logout", isUser, UserAuthController.logout);
+router.post("/deleteAccount",isUser, UserAuthController.deleteAccount)
 
 // Export routes
 module.exports = router;

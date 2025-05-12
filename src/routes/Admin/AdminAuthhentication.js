@@ -13,6 +13,7 @@ const { isAdmin } = require("../../middlewares/AdminTokenCheck");
 router.post("/signup", AdminAuthController.signupWithEmail);
 router.post("/login", AdminAuthController.loginWithEmail);
 router.post("/logout", isAdmin, AdminAuthController.logout);
+router.post("/deleteAccount", isAdmin, AdminAuthController.deleteAccount);
 
 // Export routes
 module.exports = router;

@@ -1,8 +1,9 @@
 const { DataTypes } = require("../../../config/constant");
 const sequelize = require("../../../config/database");
+const Media = require("../Media/Media");
 
 const Admin = sequelize.define(
-  'Admin',
+  "Admin",
   {
     name: {
       type: DataTypes.STRING(255),
@@ -10,7 +11,7 @@ const Admin = sequelize.define(
     },
     email: {
       type: DataTypes.STRING(40),
-      defaultValue: '',
+      defaultValue: "",
       unique: true,
     },
     password: {
@@ -20,8 +21,8 @@ const Admin = sequelize.define(
     role: {
       type: DataTypes.STRING(40),
       allowNull: true,
-      values : ['superAdmin' , 'admin', 'user'],
-      defaultValue : 'admin'
+      values: ["superAdmin", "admin", "user"],
+      defaultValue: "admin",
     },
     forgotPasswordToken: {
       type: DataTypes.STRING(40),
@@ -63,10 +64,18 @@ const Admin = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    profileImageId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: Media,
+        key: "id",
+      },
+    },
   },
 
   {
-    tableName: 'admin',
+    tableName: "admin",
     freezeTableName: true,
     timestamps: true, // Use Sequelize's built-in timestamp handling
     hooks: {
@@ -77,6 +86,13 @@ const Admin = sequelize.define(
   }
 );
 
-
+Admin.belongsTo(Media, {
+  foreignKey: "profileImageId",
+  as: "mediaDetails",
+});
+Media.hasMany(Admin, {
+  foreignKey: "profileImageId",
+  as: "adminProfiles",
+});
 
 module.exports = Admin;

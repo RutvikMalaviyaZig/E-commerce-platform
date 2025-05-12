@@ -1,6 +1,6 @@
 const { DataTypes } = require("../../../config/constant");
 const sequelize = require("../../../config/database");
-const  Media  = require('../Media/Media');
+const Media = require("../Media/Media");
 
 const User = sequelize.define(
   "User",
@@ -24,8 +24,8 @@ const User = sequelize.define(
     role: {
       type: DataTypes.STRING(40),
       allowNull: true,
-      values : ['superAdmin' , 'admin', 'user'],
-      defaultValue : "user"
+      values: ["superAdmin", "admin", "user"],
+      defaultValue: "user",
     },
     name: {
       type: DataTypes.STRING(40),
@@ -98,6 +98,10 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    countryCode: {
+      type: DataTypes.STRING(5),
+      allowNull: true,
+    },
   },
   {
     tableName: "user",
@@ -110,5 +114,14 @@ const User = sequelize.define(
     },
   }
 );
+
+User.belongsTo(Media, {
+  foreignKey: "profileImageId",
+  as: "mediaDetails",
+});
+Media.hasMany(User, {
+  foreignKey: "profileImageId",
+  as: "userProfiles",
+});
 
 module.exports = User;
