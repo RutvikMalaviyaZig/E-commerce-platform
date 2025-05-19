@@ -13,6 +13,7 @@ const { calculateAge } = require("../../helper/ageCalculation/ageCalculation");
 const { validateUserAuth } = require("../../validation/UserAuthValidation");
 const { generateError } = require("../../helper/error/generateError");
 const User = require("../../../db/models/Users/User");
+const sequelize = require("../../../config/database");
 
 module.exports = {
   /**

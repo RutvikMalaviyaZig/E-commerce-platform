@@ -1,37 +1,44 @@
 const {
   HTTP_STATUS_CODE,
   VALIDATION_EVENTS,
-  USER_ROLES,
   Op,
-  UUID,
-  BCRYPT,
 } = require("../../../config/constant");
 const { validateCategory } = require("../../validation/CategoryValidation");
 const { generateError } = require("../../helper/error/generateError");
-const Categories = require("../../../db/models/Categories/Categories");
-const Admin = require("../../../db/models/Admins/Admin");
+const Product = require("../../../db/models/Product/Product");
 const sequelize = require("../../../config/database");
 
 module.exports = {
   /**
-   * @name createCategories
-   * @file CategoriesController.js
+   * @name createProduct
+   * @file ProductController.js
    * @param {Request} req
    * @param {Response} res
-   * @description create categories by admin or super admin
+   * @description create product by admin or super admin
    * @author Rutvik Malaviya
    */
 
-  createCategories: async (req, res) => {
+  createProduct: async (req, res) => {
     try {
-      const categoryDetails = {
+      const productDetails = {
         id: req.headers.userData.id,
         categoryName: req.body.categoryName,
-        eventCode: VALIDATION_EVENTS.CREATE_CATEGORY,
+        productImageId: req.body.productImageId,
+        productName: req.body.productName,
+        price: req.body.price,
+        currencySymbol: req.body.currencySymbol,
+        productDescription: req.body.productDescription,
+        rating: req.body.rating,
+        review: req.body.review,
+        specification: req.body.specification,
+        otherDetails: req.body.otherDetails,
+        discount: req.body.discount,
+        availableOffers: req.body.availableOffers,
+        eventCode: VALIDATION_EVENTS.CREATE_PRODUCT,
       };
 
       // Perform validation
-      const validationResult = validateCategory(categoryDetails);
+      const validationResult = validateCategory(productDetails);
 
       // If any rule is violated, send validation response
       if (validationResult.hasError) {
@@ -43,41 +50,56 @@ module.exports = {
         });
       }
 
-      const checkInDb = await Categories.findOne({
+      const checkInDb = await Product.findOne({
         where: {
-          categoryName: categoryDetails.categoryName,
+          productName: productDetails.productName,
+          categoryName: productDetails.categoryName,
           isDeleted: false,
         },
+        attributes: ["id"],
       });
 
       if (checkInDb) {
         return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
           status: HTTP_STATUS_CODE.BAD_REQUEST,
-          message: req.__("Category.CategoryAlreadyExist"),
+          message: req.__("Product.ProductAlreadyExist"),
           data: {},
           error: "",
         });
       }
 
+      // payload create
+      const productPayload = {
+        categoryName: productDetails.categoryName,
+        productImageId: productDetails.productImageId,
+        productName: productDetails.productName,
+        price: productDetails.price,
+        currencySymbol: productDetails.currencySymbol,
+        productDescription: productDetails.productDescription,
+        rating: productDetails.rating,
+        review: productDetails.review,
+        specification: productDetails.specification,
+        otherDetails: productDetails.otherDetails,
+        discount: productDetails.discount,
+        availableOffers: productDetails.availableOffers,
+      };
+
       //creation of data
       await sequelize.transaction(async (transaction) => {
-        await Categories.create(
-          { categoryName: categoryDetails.categoryName },
-          { transaction }
-        );
+        await Product.create(productPayload, { transaction });
       });
 
       //send response
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
-        message: req.__("Category.CategoryCreated"),
+        message: req.__("Product.ProductCreated"),
         data: {},
         error: "",
       });
     } catch (error) {
       //create error log
       await generateError({
-        apiName: "CategoriesController - createCategories",
+        apiName: "ProductController - createProduct",
         details: error?.message ? error.message : JSON.stringify(error),
       });
       return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({
@@ -89,25 +111,36 @@ module.exports = {
     }
   },
   /**
-   * @name updateCategories
-   * @file CategoriesController.js
+   * @name updateProduct
+   * @file ProductController.js
    * @param {Request} req
    * @param {Response} res
-   * @description update categories by admin or super admin using id
+   * @description update product by admin or super admin
    * @author Rutvik Malaviya
    */
 
-  updateCategories: async (req, res) => {
+  updateProduct: async (req, res) => {
     try {
-      const categoryDetails = {
+      const productDetails = {
         id: req.headers.userData.id,
-        categoryId: req.query.categoryId,
+        productId: req.query.productId,
         categoryName: req.body.categoryName,
-        eventCode: VALIDATION_EVENTS.UPDATE_CATEGORY,
+        productImageId: req.body.productImageId,
+        productName: req.body.productName,
+        price: req.body.price,
+        currencySymbol: req.body.currencySymbol,
+        productDescription: req.body.productDescription,
+        rating: req.body.rating,
+        review: req.body.review,
+        specification: req.body.specification,
+        otherDetails: req.body.otherDetails,
+        discount: req.body.discount,
+        availableOffers: req.body.availableOffers,
+        eventCode: VALIDATION_EVENTS.UPDATE_PRODUCT,
       };
 
       // Perform validation
-      const validationResult = validateCategory(categoryDetails);
+      const validationResult = validateCategory(productDetails);
 
       // If any rule is violated, send validation response
       if (validationResult.hasError) {
@@ -119,34 +152,61 @@ module.exports = {
         });
       }
 
-      const checkInDb = await Categories.findOne({
+      const checkInDb = await Product.findOne({
         where: {
-          id: categoryDetails.categoryId,
+          id: productDetails.productId,
           isDeleted: false,
         },
-        attributes: ["id", "categoryName"],
       });
 
       if (!checkInDb) {
         return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
           status: HTTP_STATUS_CODE.BAD_REQUEST,
-          message: req.__("Category.CategoryNotExist"),
+          message: req.__("Product.ProductNotExist"),
           data: {},
           error: "",
         });
       }
 
       const updatedPayload = {
-        categoryName: categoryDetails.categoryName
-          ? categoryDetails.categoryName
+        categoryName: productDetails.categoryName
+          ? productDetails.categoryName
           : checkInDb.categoryName,
+        productImageId: productDetails.productImageId
+          ? productDetails.productImageId
+          : checkInDb.productImageId,
+        productName: productDetails.productName
+          ? productDetails.productName
+          : checkInDb.productName,
+        price: productDetails.price ? productDetails.price : checkInDb.price,
+        currencySymbol: productDetails.currencySymbol
+          ? productDetails.currencySymbol
+          : checkInDb.currencySymbol,
+        productDescription: productDetails.productDescription
+          ? productDetails.productDescription
+          : checkInDb.productDescription,
+        rating: productDetails.rating
+          ? productDetails.rating
+          : checkInDb.rating,
+        review: productDetails.review
+          ? productDetails.review
+          : checkInDb.review,
+        specification: productDetails.specification
+          ? productDetails.specification
+          : checkInDb.specification,
+        otherDetails: productDetails.otherDetails
+          ? productDetails.otherDetails
+          : checkInDb.otherDetails,
+        discount: productDetails.discount
+          ? productDetails.discount
+          : checkInDb.discount,
       };
 
       //creation of data
       await sequelize.transaction(async (transaction) => {
-        await Categories.update(updatedPayload, {
+        await Product.update(updatedPayload, {
           where: {
-            id: categoryDetails.categoryId,
+            id: productDetails.productId,
             isDeleted: false,
           },
           transaction,
@@ -156,14 +216,14 @@ module.exports = {
       //send response
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
-        message: req.__("Category.CategoryUpdated"),
+        message: req.__("Product.ProductUpdated"),
         data: {},
         error: "",
       });
     } catch (error) {
       //create error log
       await generateError({
-        apiName: "CategoriesController - updateCategories",
+        apiName: "ProductController - updateProduct",
         details: error?.message ? error.message : JSON.stringify(error),
       });
       return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({
@@ -176,24 +236,24 @@ module.exports = {
   },
 
   /**
-   * @name deleteCategories
-   * @file CategoriesController.js
+   * @name deleteProduct
+   * @file ProductController.js
    * @param {Request} req
    * @param {Response} res
-   * @description delete categories by admin or super admin using id
+   * @description delete product by admin or super admin using id
    * @author Rutvik Malaviya
    */
 
-  deleteCategories: async (req, res) => {
+  deleteProduct: async (req, res) => {
     try {
-      const categoryDetails = {
+      const productDetails = {
         id: req.headers.userData.id,
-        categoryId: req.query.categoryId,
-        eventCode: VALIDATION_EVENTS.DELETE_CATEGORY,
+        productId: req.query.productId,
+        eventCode: VALIDATION_EVENTS.DELETE_PRODUCT,
       };
 
       // Perform validation
-      const validationResult = validateCategory(categoryDetails);
+      const validationResult = validateCategory(productDetails);
 
       // If any rule is violated, send validation response
       if (validationResult.hasError) {
@@ -205,9 +265,9 @@ module.exports = {
         });
       }
 
-      const checkInDb = await Categories.findOne({
+      const checkInDb = await Product.findOne({
         where: {
-          id: categoryDetails.categoryId,
+          id: productDetails.productId,
           isDeleted: false,
         },
         attributes: ["id"],
@@ -216,7 +276,7 @@ module.exports = {
       if (!checkInDb) {
         return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
           status: HTTP_STATUS_CODE.BAD_REQUEST,
-          message: req.__("Category.CategoryNotExist"),
+          message: req.__("Product.ProductNotExist"),
           data: {},
           error: "",
         });
@@ -224,32 +284,26 @@ module.exports = {
 
       //creation of data
       await sequelize.transaction(async (transaction) => {
-        await Categories.update(
-          {
-            isDeleted: true,
-            deletedAt: Date.now(),
+        await Product.destroy({
+          where: {
+            id: productDetails.productId,
+            isDeleted: false,
           },
-          {
-            where: {
-              id: categoryDetails.categoryId,
-              isDeleted: false,
-            },
-            transaction,
-          }
-        );
+          transaction,
+        });
       });
 
       //send response
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
-        message: req.__("Category.CategoryDeleted"),
+        message: req.__("Product.ProductDeleted"),
         data: {},
         error: "",
       });
     } catch (error) {
       //create error log
       await generateError({
-        apiName: "CategoriesController - deleteCategories",
+        apiName: "ProductController - deleteProduct",
         details: error?.message ? error.message : JSON.stringify(error),
       });
       return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({
@@ -262,17 +316,17 @@ module.exports = {
   },
 
   /**
-   * @name listCategories
-   * @file CategoriesController.js
+   * @name listProduct
+   * @file ProductController.js
    * @param {Request} req
    * @param {Response} res
-   * @description list categories by admin or super admin
+   * @description list product by admin or super admin
    * @author Rutvik Malaviya
    */
 
-  listCategories: async (req, res) => {
+  listProduct: async (req, res) => {
     try {
-      const categoryDetails = {
+      const productDetails = {
         id: req.headers.userData.id,
         limit: Number(req.query.limit) || 10,
         skip: Number(req.query.skip) || 0,
@@ -285,22 +339,21 @@ module.exports = {
       };
 
       //search admin by name
-      if (categoryDetails.search && categoryDetails.search !== "") {
-        findQuery.categoryName = {
-          [Op.iLike]: `%${categoryDetails.search}%`,
+      if (productDetails.search && productDetails.search !== "") {
+        findQuery.productName = {
+          [Op.iLike]: `%${productDetails.search}%`,
         };
       }
 
       //sorting data
-      const splitSortBy = categoryDetails.sortBy.split("-");
+      const splitSortBy = productDetails.sortBy.split("-");
 
       //check if admin already exists with same name or not\
-      const findExist = await Categories.findAndCountAll({
+      const findExist = await Product.findAndCountAll({
         where: findQuery,
-        limit: categoryDetails.limit,
-        offset: categoryDetails.skip,
+        limit: productDetails.limit,
+        offset: productDetails.skip,
         order: [[splitSortBy[0], splitSortBy[1]]],
-        attributes: ["id", "categoryName"],
       });
 
       //send response
@@ -316,7 +369,7 @@ module.exports = {
     } catch (error) {
       //create error log
       await generateError({
-        apiName: "CategoriesController - listCategories",
+        apiName: "ProductController - listproduct",
         details: error?.message ? error.message : JSON.stringify(error),
       });
       return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({

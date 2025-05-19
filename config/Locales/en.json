@@ -63,7 +63,24 @@
     "CategoryUpdated": "Category Updated successfully",
     "CategoryDeleted": "Category Deleted Successfully",
     "CategoryAlreadyExist": "Category already exists with same name",
-    "CategoryNotExist" : "Category Not exists"
+    "CategoryNotExist": "Category Not exists"
+  },
+  "Product": {
+    "ProductCreated": "Product created successfully",
+    "ProductUpdated": "Product Updated successfully",
+    "ProductDeleted": "Product Deleted Successfully",
+    "ProductAlreadyExist": "Product already exists with same name",
+    "ProductNotExist": "Product Not exists"
+  },
+  "Like": {
+    "LikeUpdated": "Like Updated successfully",
+    "LikeProductAlreadyExist": "Like Product Already Exist"
+  },
+  "Address": {
+    "AddressCreated": "Address created successfully",
+    "AddressUpdated": "Product Updated successfully",
+    "AddressDeleted": "Product Deleted Successfully",
+    "AddressAlreadyExist": "Address Already Exist"
   },
   "General": {
     "SomethingWentsWrong": "Something wents wrong",

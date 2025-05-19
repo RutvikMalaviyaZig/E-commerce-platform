@@ -42,14 +42,22 @@ const VALIDATION_EVENTS = {
 
   // categories
   CREATE_CATEGORY: "createCategory",
-  UPDATE_CATEGORY : "updateCategory",
-  DELETE_CATEGORY : "deleteCategory",
+  UPDATE_CATEGORY: "updateCategory",
+  DELETE_CATEGORY: "deleteCategory",
 
   // product
-
   CREATE_PRODUCT: "createProduct",
-  UPDATE_PRODUCT : "updateProduct",
-  DELETE_PRODUCT : "deleteProduct",
+  UPDATE_PRODUCT: "updateProduct",
+  DELETE_PRODUCT: "deleteProduct",
+
+  // Like
+  LIKE_PRODUCT: "likeProduct",
+  DISLIKE_PRODUCT: "dislikeProduct",
+
+  // addres
+  CREATE_ADDRESS: "createAddress",
+  UPDATE_ADDRESS: "updateAddress",
+  DELETE_ADDRESS: "deleteAddress",
 };
 
 // Response Codes
