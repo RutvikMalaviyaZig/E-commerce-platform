@@ -14,7 +14,7 @@ const validateAddress = (bodyData) => {
         state: "string|required",
         country: "string|required",
         postalCode: "string|required",
-        typeOfAddress: "string|required",
+        typeOfAddress: "string",
       };
 
       break;
@@ -31,7 +31,7 @@ const validateAddress = (bodyData) => {
         state: "string|required",
         country: "string|required",
         postalCode: "string|required",
-        typeOfAddress: "string|required",
+        typeOfAddress: "string",
       };
 
       break;
@@ -40,7 +40,8 @@ const validateAddress = (bodyData) => {
     case VALIDATION_EVENTS.DELETE_ADDRESS: {
       // Data validation rules
       rules = {
-        adressId: "string|required",
+        addressId: "string|required",
+        userId: "string|required",
       };
 
       break;

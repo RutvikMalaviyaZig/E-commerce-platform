@@ -78,9 +78,10 @@
   },
   "Address": {
     "AddressCreated": "Address created successfully",
-    "AddressUpdated": "Product Updated successfully",
-    "AddressDeleted": "Product Deleted Successfully",
-    "AddressAlreadyExist": "Address Already Exist"
+    "AddressUpdated": "Address Updated successfully",
+    "AddressDeleted": "Address Deleted Successfully",
+    "AddressAlreadyExist": "Address Already Exist",
+    "AddressNotExist": "Address Not Exist"
   },
   "General": {
     "SomethingWentsWrong": "Something wents wrong",

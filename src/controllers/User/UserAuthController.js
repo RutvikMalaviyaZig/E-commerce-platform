@@ -240,7 +240,7 @@ module.exports = {
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
         message: req.__("User.Auth.Login"),
-        data: {},
+        data: userData.dataValues.authToken,
         error: "",
       });
     } catch (error) {

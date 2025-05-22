@@ -17,7 +17,7 @@ module.exports = {
    * @file AddressController.js
    * @param {Request} req
    * @param {Response} res
-   * @description create address for user
+   * @description create address for user by admin
    * @author Rutvik Malaviya
    */
 
@@ -311,20 +311,24 @@ module.exports = {
         sortBy: req.query.sortBy || "createdAt-DESC", //name = ASC, DESC
         eventCode: VALIDATION_EVENTS.DELETE_ADDRESS,
       };
-
       let findQuery = {
         isDeleted: false,
       };
 
+      if (addressDetails.search && addressDetails.search !== "") {
+        findQuery[Op.or] = [
+          { city: { [Op.iLike]: `%${addressDetails.search}%` } },
+          { state: { [Op.iLike]: `%${addressDetails.search}%` } },
+          { postalCode: { [Op.iLike]: `%${addressDetails.search}%` } },
+        ];
+      }
       //sorting data
       const splitSortBy = addressDetails.sortBy.split("-");
 
       //check if admin already exists with same name or not\
+
       const findExist = await Address.findAndCountAll({
         where: findQuery,
-        attributes: {
-          exclude: ["createdAt", "updatedAt", "deletedAt", "isDeleted"],
-        },
         limit: addressDetails.limit,
         offset: addressDetails.skip,
         order: [[splitSortBy[0], splitSortBy[1]]],
