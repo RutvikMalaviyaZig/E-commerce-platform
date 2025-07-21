@@ -1,8 +1,5 @@
 const express = require('express');
 
-// Policies
-// const { isUser } = require('../../policies/isUser');
-
 // Routes
 const router = express.Router();
 

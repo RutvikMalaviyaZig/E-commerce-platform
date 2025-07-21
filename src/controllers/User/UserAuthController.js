@@ -13,6 +13,7 @@ const { calculateAge } = require("../../helper/ageCalculation/ageCalculation");
 const { validateUserAuth } = require("../../validation/UserAuthValidation");
 const { generateError } = require("../../helper/error/generateError");
 const User = require("../../../db/models/Users/User");
+const sequelize = require("../../../config/database");
 
 module.exports = {
   /**
@@ -239,7 +240,7 @@ module.exports = {
       return res.status(HTTP_STATUS_CODE.OK).json({
         status: HTTP_STATUS_CODE.OK,
         message: req.__("User.Auth.Login"),
-        data: {},
+        data: userData.dataValues.authToken,
         error: "",
       });
     } catch (error) {

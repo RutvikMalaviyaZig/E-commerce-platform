@@ -54,14 +54,62 @@
       "AdminDeleted": "Admin deleted successfully",
       "UserUpdated": "User updated successfully",
       "UserCreated": "User created successfully",
-      "UserDeleted" : "User deleted successfully",
-      "Deleted" : "Deleted Successfully"
+      "UserDeleted": "User deleted successfully",
+      "Deleted": "Deleted Successfully"
     }
+  },
+  "Category": {
+    "CategoryCreated": "Category created successfully",
+    "CategoryUpdated": "Category Updated successfully",
+    "CategoryDeleted": "Category Deleted Successfully",
+    "CategoryAlreadyExist": "Category already exists with same name",
+    "CategoryNotExist": "Category Not exists"
+  },
+  "Product": {
+    "ProductCreated": "Product created successfully",
+    "ProductUpdated": "Product Updated successfully",
+    "ProductDeleted": "Product Deleted Successfully",
+    "ProductAlreadyExist": "Product already exists with same name",
+    "ProductNotExist": "Product Not exists",
+    "ProductNotFound": "Product Not Found"
+  },
+  "Like": {
+    "LikeUpdated": "Like Updated successfully",
+    "LikeProductAlreadyExist": "Like Product Already Exist"
+  },
+  "Address": {
+    "AddressCreated": "Address created successfully",
+    "AddressUpdated": "Address Updated successfully",
+    "AddressDeleted": "Address Deleted Successfully",
+    "AddressAlreadyExist": "Address Already Exist",
+    "AddressNotExist": "Address Not Exist"
   },
   "General": {
     "SomethingWentsWrong": "Something wents wrong",
     "FileNotFound": "File not found",
     "FileRequired": "File is required",
     "BackendFine": "Backend working fine"
+  },
+  "Cart": {
+    "CartCreated": "Cart created successfully",
+    "CartUpdated": "Cart Updated successfully",
+    "CartDeleted": "Cart Deleted Successfully",
+    "CartAlreadyExist": "Cart Already Exist",
+    "CartNotExist": "Cart Not Exist"
+  },
+  "Order": {
+    "OrderCreated": "Order created successfully",
+    "OrderUpdated": "Order Updated successfully",
+    "OrderDeleted": "Order Deleted Successfully",
+    "OrderAlreadyExist": "Order Already Exist",
+    "OrderNotExist": "Order Not Exist",
+    "OrderNotFound": "Order Not Found"
+  },
+  "Review": {
+    "ReviewCreated": "Review created successfully",
+    "ReviewUpdated": "Review Updated successfully",
+    "ReviewDeleted": "Review Deleted Successfully",
+    "ReviewAlreadyExist": "Review Already Exist",
+    "ReviewNotExist": "Review Not Exist"
   }
 }

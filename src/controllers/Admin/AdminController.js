@@ -713,7 +713,6 @@ module.exports = {
         skip: Number(req.query.skip) || 0,
         search: req.query.search,
         sortBy: req.query.sortBy || "createdAt-DESC", //name = ASC, DESC
-        eventCode: VALIDATION_EVENTS.GET_ADMIN_LIST,
       };
 
       let findQuery = {

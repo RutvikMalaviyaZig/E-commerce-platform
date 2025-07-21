@@ -15,6 +15,7 @@ A full-featured E-Commerce Backend built with **NodeJS** and **PostgreSQL** . It
 - 📬 Order Management
 - 🏠 Address Management
 - ❤️ Like System
+- 💳 Stripe Payment Gateway Integration
 - ☁️ File Upload with Multer & Cloudinary
 - 🐳 Docker Support
 
@@ -25,6 +26,7 @@ A full-featured E-Commerce Backend built with **NodeJS** and **PostgreSQL** . It
 - **Node.js**
 - **PostgreSQL** (Relational Database)
 - **JWT** & **Bcrypt** (Authentication & Password Hashing)
+- **Stripe** (Payment Gateway)
 - **Multer** & **Cloudinary** (File Upload & Storage)
 - **Docker** (Containerization)
 
@@ -79,6 +81,13 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin_password
+
+# Stripe Configuration
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
+STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
+STRIPE_SUCCESS_URL=http://localhost:3000/payment/success
+STRIPE_CANCEL_URL=http://localhost:3000/payment/cancel
 ```
 
 ### `.env.test`
@@ -101,6 +110,11 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin_password
+
+# Stripe Configuration
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
+STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
 ```
 
 ### `.env.production`
@@ -123,6 +137,13 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin_password
+
+# Stripe Configuration
+STRIPE_SECRET_KEY=sk_live_your_stripe_secret_key_here
+STRIPE_PUBLISHABLE_KEY=pk_live_your_stripe_publishable_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
+STRIPE_SUCCESS_URL=https://your-domain.com/payment/success
+STRIPE_CANCEL_URL=https://your-domain.com/payment/cancel
 ```
 
 ---
@@ -182,6 +203,13 @@ docker-compose up --build
 - `PUT /admin/editProfile` - Update admin or superAdmin by ID
 - `DELETE /admin/deleteAccount` - Delete account by ID
 
+### 🗂️ Categories
+
+- `POST /category/create` - Create a new category (Admin only)
+- `GET /category.list` - Get all categories
+- `PUT /category/update?id` - Update a category (Admin only)
+- `DELETE /category/delete?id` - Delete a category (Admin only)
+
 ### 🛒 Products
 
 - `POST /products` - Create a new product
@@ -189,14 +217,6 @@ docker-compose up --build
 - `GET /products/{id}` - Get a product by ID
 - `PUT /products/{id}` - Update a product (Admin only)
 - `DELETE /products/{id}` - Delete a product (Admin only)
-
-### 🗂️ Categories
-
-- `POST /categories` - Create a new category (Admin only)
-- `GET /categories` - Get all categories
-- `GET /categories/id/{id}` - Get a category by ID
-- `PUT /categories/{id}` - Update a category (Admin only)
-- `DELETE /categories/{id}` - Delete a category (Admin only)
 
 ### ❤️ Likes
 
@@ -222,6 +242,35 @@ docker-compose up --build
 - `DELETE /orders/{id}` - Delete an order
 - `PUT /orders/{id}/complete` - Complete an order (Admin only)
 - `PUT /orders/{id}/cancel` - Cancel an order (Admin only)
+
+### 💳 Payments (Stripe)
+
+- `POST /payment/create-payment-intent` - Create a payment intent for client-side payment
+- `POST /payment/confirm-payment` - Confirm payment and create order
+- `POST /payment/create-checkout-session` - Create Stripe checkout session for redirect-based payment
+- `POST /payment/webhook` - Handle Stripe webhook events
+
+---
+
+## 💳 Stripe Payment Integration
+
+This platform includes full Stripe payment gateway integration. For detailed setup instructions and usage examples, see [STRIPE_INTEGRATION.md](./STRIPE_INTEGRATION.md).
+
+### Quick Setup
+
+1. **Get Stripe API Keys**: Sign up at [stripe.com](https://stripe.com) and get your API keys
+2. **Add Environment Variables**: Add your Stripe keys to your `.env` file
+3. **Run Migration**: Execute `npx sequelize-cli db:migrate` to add Stripe fields
+4. **Test Integration**: Use the example HTML file at `public/stripe-payment-example.html`
+
+### Frontend Integration
+
+The platform supports two payment methods:
+
+- **Payment Element**: For embedded payment forms
+- **Checkout Session**: For redirect-based payments
+
+See the integration guide for complete implementation details.
 
 ---
 
