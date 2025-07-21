@@ -49,6 +49,8 @@ const VALIDATION_EVENTS = {
   CREATE_PRODUCT: "createProduct",
   UPDATE_PRODUCT: "updateProduct",
   DELETE_PRODUCT: "deleteProduct",
+  CREATE_REVIEW: "createReview",
+  GET_PRODUCT_BY_ID: "getProductById",
 
   // Like
   LIKE_PRODUCT: "likeProduct",
@@ -58,6 +60,16 @@ const VALIDATION_EVENTS = {
   CREATE_ADDRESS: "createAddress",
   UPDATE_ADDRESS: "updateAddress",
   DELETE_ADDRESS: "deleteAddress",
+
+  // order
+  CREATE_ORDER: "createOrder",
+  DELETE_ORDER: "deleteOrder",
+  VIEW_ORDER: "viewOrder",
+  GET_ORDER_BY_ID: "getOrderById",
+  GET_ORDER_BY_USER_ID: "getOrderByUserId",
+  // cart
+  ADD_TO_CART: "addToCart",
+  REMOVE_FROM_CART: "removeFromCart",
 };
 
 // Response Codes

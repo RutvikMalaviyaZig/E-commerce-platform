@@ -380,4 +380,71 @@ module.exports = {
       });
     }
   },
+
+  /**
+   * @name getProductById
+   * @file ProductController.js
+   * @param {Request} req
+   * @param {Response} res
+   * @description get product by id by admin or super admin
+   * @author Rutvik Malaviya
+   */
+
+  getProductById: async (req, res) => {
+    try {
+      const productDetails = {
+        id: req.params.productId,
+        eventCode: VALIDATION_EVENTS.GET_PRODUCT_BY_ID,
+      };
+
+      // Perform validation
+      const validationResult = validateCategory(productDetails);
+
+      // If any rule is violated, send validation response
+      if (validationResult.hasError) {
+        return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({
+          status: HTTP_STATUS_CODE.BAD_REQUEST,
+          data: {},
+          message: "",
+          error: validationResult.errors,
+        });
+      }
+
+      const product = await Product.findOne({
+        where: {
+          id: productDetails.id,
+          isDeleted: false,
+        },
+      });
+
+      if (!product) {
+        return res.status(HTTP_STATUS_CODE.NOT_FOUND).json({
+          status: HTTP_STATUS_CODE.NOT_FOUND,
+          message: "Product not found",
+          data: {},
+          error: "",
+        });
+      }
+
+      //send response
+      return res.status(HTTP_STATUS_CODE.OK).json({
+        status: HTTP_STATUS_CODE.OK,
+        message: "",
+        data: product,
+        error: "",
+      });
+    } catch (error) {
+      //create error log
+      await generateError({
+        apiName: "ProductController - getProductById",
+        details: error?.message ? error.message : JSON.stringify(error),
+      });
+      return res.status(HTTP_STATUS_CODE.SERVER_ERROR).json({
+        status: HTTP_STATUS_CODE.SERVER_ERROR,
+        message: "",
+        data: {},
+        error: error.message,
+      });
+    }
+  },
 };

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stripe Payment Example</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input,
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      #payment-element {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .error {
+        color: red;
+        margin-top: 10px;
+      }
+      .success {
+        color: green;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Stripe Payment Integration Example</h1>
+
+    <div class="form-group">
+      <label for="productId">Product ID:</label>
+      <input type="text" id="productId" placeholder="Enter product UUID" />
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" value="1" min="1" />
+    </div>
+
+    <div class="form-group">
+      <label for="addressId">Address ID:</label>
+      <input type="text" id="addressId" placeholder="Enter address UUID" />
+    </div>
+
+    <div class="form-group">
+      <label for="userToken">User Token:</label>
+      <input type="text" id="userToken" placeholder="Enter your JWT token" />
+    </div>
+
+    <div class="form-group">
+      <label for="apiBaseUrl">API Base URL:</label>
+      <input
+        type="text"
+        id="apiBaseUrl"
+        value="http://localhost:3000"
+        placeholder="API base URL"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="stripePublishableKey">Stripe Publishable Key:</label>
+      <input type="text" id="stripePublishableKey" placeholder="pk_test_..." />
+    </div>
+
+    <button onclick="createPaymentIntent()">Create Payment Intent</button>
+    <button onclick="createCheckoutSession()">Create Checkout Session</button>
+
+    <div id="payment-form" style="display: none">
+      <h3>Complete Payment</h3>
+      <div id="payment-element"></div>
+      <button id="submit-button" onclick="confirmPayment()">Pay Now</button>
+      <div id="payment-message"></div>
+    </div>
+
+    <div id="result"></div>
+
+    <script>
+      let stripe;
+      let elements;
+      let clientSecret;
+      let paymentIntentId;
+
+      async function createPaymentIntent() {
+        const productId = document.getElementById("productId").value;
+        const quantity = document.getElementById("quantity").value;
+        const addressId = document.getElementById("addressId").value;
+        const userToken = document.getElementById("userToken").value;
+        const apiBaseUrl = document.getElementById("apiBaseUrl").value;
+
+        if (!productId || !quantity || !addressId || !userToken) {
+          showResult("Please fill in all required fields", "error");
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `${apiBaseUrl}/payment/create-payment-intent`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${userToken}`,
+              },
+              body: JSON.stringify({
+                productId,
+                quantity: parseInt(quantity),
+                addressId,
+              }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            clientSecret = result.data.clientSecret;
+            paymentIntentId = result.data.paymentIntentId;
+
+            // Initialize Stripe
+            const publishableKey = document.getElementById(
+              "stripePublishableKey"
+            ).value;
+            if (!publishableKey) {
+              showResult("Please enter your Stripe publishable key", "error");
+              return;
+            }
+
+            stripe = Stripe(publishableKey);
+            elements = stripe.elements();
+
+            // Create payment element
+            const paymentElement = elements.create("payment");
+            paymentElement.mount("#payment-element");
+
+            // Show payment form
+            document.getElementById("payment-form").style.display = "block";
+            showResult(
+              "Payment intent created successfully! Complete your payment below.",
+              "success"
+            );
+          } else {
+            showResult(`Error: ${result.message}`, "error");
+          }
+        } catch (error) {
+          showResult(`Error: ${error.message}`, "error");
+        }
+      }
+
+      async function confirmPayment() {
+        if (!stripe || !elements) {
+          showResult("Please create a payment intent first", "error");
+          return;
+        }
+
+        const submitButton = document.getElementById("submit-button");
+        const paymentMessage = document.getElementById("payment-message");
+
+        submitButton.disabled = true;
+        paymentMessage.textContent = "Processing payment...";
+
+        const { error } = await stripe.confirmPayment({
+          elements,
+          confirmParams: {
+            return_url: `${
+              document.getElementById("apiBaseUrl").value
+            }/payment/success`,
+          },
+        });
+
+        if (error) {
+          paymentMessage.textContent = error.message;
+          submitButton.disabled = false;
+        }
+      }
+
+      async function createCheckoutSession() {
+        const productId = document.getElementById("productId").value;
+        const quantity = document.getElementById("quantity").value;
+        const addressId = document.getElementById("addressId").value;
+        const userToken = document.getElementById("userToken").value;
+        const apiBaseUrl = document.getElementById("apiBaseUrl").value;
+
+        if (!productId || !quantity || !addressId || !userToken) {
+          showResult("Please fill in all required fields", "error");
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `${apiBaseUrl}/payment/create-checkout-session`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${userToken}`,
+              },
+              body: JSON.stringify({
+                productId,
+                quantity: parseInt(quantity),
+                addressId,
+              }),
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            // Redirect to Stripe Checkout
+            window.location.href = result.data.sessionUrl;
+          } else {
+            showResult(`Error: ${result.message}`, "error");
+          }
+        } catch (error) {
+          showResult(`Error: ${error.message}`, "error");
+        }
+      }
+
+      function showResult(message, type) {
+        const resultDiv = document.getElementById("result");
+        resultDiv.textContent = message;
+        resultDiv.className = type;
+      }
+    </script>
+  </body>
+</html>

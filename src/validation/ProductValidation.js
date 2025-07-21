@@ -1,7 +1,4 @@
-const {
-  VALIDATION_EVENTS,
-  VALIDATOR,
-} = require("../../config/constant");
+const { VALIDATION_EVENTS, VALIDATOR } = require("../../config/constant");
 
 const validateCategory = (bodyData) => {
   let rules;
@@ -12,17 +9,17 @@ const validateCategory = (bodyData) => {
       rules = {
         id: "string|required",
         categoryName: "string|required",
-        productImageId : "string|required",
+        productImageId: "string|required",
         productName: "string|required",
         price: "string|required",
-        currencySymbol:"string|required",
-        productDescription :"string|required",
-        rating : "string|required",
-        review : "string|required",
-        specification : "string|required",
-        otherDetails : "string|required",
-        discount : "string|required",
-        availableOffers : "string|required",
+        currencySymbol: "string|required",
+        productDescription: "string|required",
+        rating: "string|required",
+        review: "string|required",
+        specification: "string|required",
+        otherDetails: "string|required",
+        discount: "string|required",
+        availableOffers: "string|required",
       };
 
       break;
@@ -32,19 +29,19 @@ const validateCategory = (bodyData) => {
       // Data validation rules
       rules = {
         id: "string|required",
-        categoryId : "string|required",
-        categoryName : "string|required",
-        productImageId : "string|required",
+        categoryId: "string|required",
+        categoryName: "string|required",
+        productImageId: "string|required",
         productName: "string|required",
         price: "string|required",
-        currencySymbol:"string|required",
-        productDescription :"string|required",
-        rating : "string|required",
-        review : "string|required",
-        specification : "string|required",
-        otherDetails : "string|required",
-        discount : "string|required",
-        availableOffers : "string|required",
+        currencySymbol: "string|required",
+        productDescription: "string|required",
+        rating: "string|required",
+        review: "string|required",
+        specification: "string|required",
+        otherDetails: "string|required",
+        discount: "string|required",
+        availableOffers: "string|required",
       };
 
       break;
@@ -58,6 +55,25 @@ const validateCategory = (bodyData) => {
       };
 
       break;
+    }
+
+    case VALIDATION_EVENTS.CREATE_REVIEW: {
+      // Data validation rules
+      rules = {
+        userId: "string|required",
+        productId: "string|required",
+        rating: "string|required|min:1|max:10",
+        review: "string|required",
+      };
+
+      break;
+    }
+
+    case VALIDATION_EVENTS.GET_PRODUCT_BY_ID: {
+      // Data validation rules
+      rules = {
+        id: "string|required",
+      };
     }
   }
 
